@@ -1,0 +1,24 @@
+{
+  "name": "blackmenreadbackend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.5",
+    "csv-loader": "3.0.5",
+    "csv-parse": "6.1.0",
+    "dotenv": "^17.3.1",
+    "express": "^5.1.0",
+    "mongodb": "^7.0.0",
+    "mongoose": "^8.20.0",
+    "papaparse": "5.5.3"
+  }
+}
