@@ -178,7 +178,7 @@ async function getUserUsingEmailAndPassword(email = '', passwordInst = '', userT
             await client.connect();
 
             // Send a ping to confirm a successful connection
-            const users = await client.db("UserData").collection(userType + 'Users').find({ Email: email, Password: await password }).toArray()
+            const users = await client.db("UserData").collection(userType + 'Users').find({ Email: email.toLowerCase(), Password: await password }).toArray()
             //console.log(users[0])
             //console.log("Pinged your deployment. You successfully connected to MongoDB!");
             return users[0]
@@ -205,13 +205,13 @@ async function removeUserLogData(email = '', password = '', userType = '') {
             await client.connect();
 
             // Send a ping to confirm a successful connection
-            const users = await client.db("UserData").collection(userType + 'Users').find({ Email: email, Password: password }).toArray()
+            const users = await client.db("UserData").collection(userType + 'Users').find({ Email: email.toLocaleLowerCase(), Password: password }).toArray()
             //console.log(users[0])
             //console.log("Pinged your deployment. You successfully connected to MongoDB!");
             var userInst = users[0]
             userInst['Logs'] = []
             console.log(userInst)
-            await client.db("UserData").collection(userType + 'Users').replaceOne({ Email: email, Password: password }, userInst)
+            await client.db("UserData").collection(userType + 'Users').replaceOne({ Email: email.toLowerCase(), Password: password }, userInst)
 
         } finally {
             // Ensures that the client will close when you finish/error
@@ -236,7 +236,7 @@ async function getUserUsingObjectId(email = '', id = '', userType = '') {
             await client.connect();
 
             // Send a ping to confirm a successful connection
-            const users = await client.db("UserData").collection(userType + 'Users').find({ Email: email, _id: new ObjectId(id) }).toArray()
+            const users = await client.db("UserData").collection(userType + 'Users').find({ Email: email.toLowerCase(), _id: new ObjectId(id) }).toArray()
 
             console.log(users[0])
             //console.log("Pinged your deployment. You successfully connected to MongoDB!");
@@ -267,8 +267,8 @@ async function AddNewUser(email = '', passwordInst = '', username = '', acountTy
             await client.connect();
 
             // Send a ping to confirm a successful connection
-            await client.db("UserData").collection(acountType + 'Users').insertOne({ Email: email, Password: await password, UserName: username, UserType: acountType, DateCreated: new Date })
-            await client.db("UserData").collection('UsedEmails').insertOne({ Email: email })
+            await client.db("UserData").collection(acountType + 'Users').insertOne({ Email: email.toLowerCase(), Password: await password, UserName: username, UserType: acountType, DateCreated: new Date })
+            await client.db("UserData").collection('UsedEmails').insertOne({ Email: email.toLowerCase() })
             //console.log(users[0])
             //console.log("Pinged your deployment. You successfully connected to MongoDB!");
         } finally {
@@ -281,7 +281,7 @@ async function AddNewUser(email = '', passwordInst = '', username = '', acountTy
 async function changeUserData(email = '', id, dataToChange = '', changeDataTo, acountType = 'Tutor') {
     if (acountType == 'Student' || acountType == 'Parent' || acountType == 'Tutor') {
         changeDataTo['_id'] = id;
-        changeDataTo['Email'] = email;
+        changeDataTo['Email'] = email.toLowerCase();
 
         const client = new MongoClient(uri, {
             serverApi: {
@@ -295,13 +295,13 @@ async function changeUserData(email = '', id, dataToChange = '', changeDataTo, a
             // Connect the client to the server	(optional starting in v4.7)
             console.log(changeDataTo)
             await client.connect();
-            const data = await client.db("UserData").collection(acountType + 'Users').find({ Email: email, _id: new ObjectId(id) }).toArray()
+            const data = await client.db("UserData").collection(acountType + 'Users').find({ Email: email.toLowerCase(), _id: new ObjectId(id) }).toArray()
 
             var gottendata = data[0]
             gottendata[dataToChange] = changeDataTo
             console.log(gottendata)
             // Send a ping to confirm a successful connection
-            await client.db("UserData").collection(acountType + 'Users').replaceOne({ Email: email, _id: new ObjectId(id) }, gottendata)
+            await client.db("UserData").collection(acountType + 'Users').replaceOne({ Email: email.toLowerCase(), _id: new ObjectId(id) }, gottendata)
 
             //console.log("Pinged your deployment. You successfully connected to MongoDB!");
             return await gottendata;
@@ -329,7 +329,7 @@ async function updateUserReaddingData(email = '', id, acountType = 'Student') {
             // Connect the client to the server	(optional starting in v4.7)
             //console.log(changeDataTo)
             await client.connect();
-            const data = await client.db("UserData").collection(acountType + 'Users').find({ Email: email, _id: new ObjectId(id) }).toArray()
+            const data = await client.db("UserData").collection(acountType + 'Users').find({ Email: email.toLowerCase(), _id: new ObjectId(id) }).toArray()
 
             var gottendata = data[0]
 
@@ -436,7 +436,7 @@ async function updateUserReaddingData(email = '', id, acountType = 'Student') {
                 }
 
 
-                await client.db("UserData").collection(acountType + 'Users').replaceOne({ Email: email, _id: new ObjectId(id) }, addData)
+                await client.db("UserData").collection(acountType + 'Users').replaceOne({ Email: email.toLowerCase(), _id: new ObjectId(id) }, addData)
             }
             else {
                 console.log('Stats Do not Exist')
@@ -452,7 +452,7 @@ async function updateUserReaddingData(email = '', id, acountType = 'Student') {
 
                 }
                 addData["ReadingStats"] = { BooksRead: {}, TotalTimeRead: '' };
-                await client.db("UserData").collection(acountType + 'Users').replaceOne({ Email: email, _id: new ObjectId(id) }, addData)
+                await client.db("UserData").collection(acountType + 'Users').replaceOne({ Email: email.toLowerCase(), _id: new ObjectId(id) }, addData)
 
             }
             // Send a ping to confirm a successful connection
@@ -495,7 +495,7 @@ async function connectAcountDataToNewData(connectToData, toConnectData) {
         modifiedData['ConnectedAcounts'] = []
         console.log(modifiedData)
     }
-    modifiedData['ConnectedAcounts'][modifiedData['ConnectedAcounts'].length] = { UserName: toConnectData['UserName'], Email: toConnectData['Email'], id: toConnectData['_id'] }
+    modifiedData['ConnectedAcounts'][modifiedData['ConnectedAcounts'].length] = { UserName: toConnectData['UserName'], Email: toConnectData['Email'].toLowerCase(), id: toConnectData['_id'] }
 
 
     return modifiedData['ConnectedAcounts'];
@@ -524,10 +524,10 @@ async function getUserData(userData) {
 
                 var connectedValidList = []
                 for (element of userData['ConnectedAcounts']) {
-                    const fullData = await getUserUsingObjectId(element['Email'], element['id'], 'Student')
+                    const fullData = await getUserUsingObjectId(element['Email'].toLowerCase(), element['id'], 'Student')
                     if (await fullData) {
                         console.log(await fullData)
-                        connectedValidList[connectedValidList.length] = { UserName: fullData['UserName'], Email: fullData['Email'], id: fullData['_id'] }
+                        connectedValidList[connectedValidList.length] = { UserName: fullData['UserName'], Email: fullData['Email'].toLowerCase(), id: fullData['_id'] }
 
                     }
 
@@ -572,7 +572,7 @@ async function isEmailUsed(email = '') {
         await client.connect();
 
         // Send a ping to confirm a successful connection
-        users = await (await client.db("UserData").collection('UsedEmails').find({ Email: email }).toArray() != 0)
+        users = await (await client.db("UserData").collection('UsedEmails').find({ Email: email.toLowerCase() }).toArray() != 0)
 
         console.log(users)
         return users
@@ -628,7 +628,7 @@ app.post('/LoginForm', async (req, res) => {
     try {
 
 
-        const data = await getUserUsingEmailAndPassword(req.body.user.email, req.body.user.password, req.body.user.usertype);
+        const data = await getUserUsingEmailAndPassword(req.body.user.email.toLowerCase(), req.body.user.password, req.body.user.usertype);
         const interpratedData = await getUserData(await data)
         //sendUserData(res, getUserData(data))
 
@@ -648,9 +648,9 @@ app.post('/LoginForm', async (req, res) => {
 
 });
 app.post('/AddNewUserForm', async (req, res) => {
-    if (await isEmailUsed(req.body.user.email) == false) {
-        await AddNewUser(req.body.user.email, req.body.user.password, req.body.user.username, req.body.user.usertype);
-        const newuser = await getUserUsingEmailAndPassword(req.body.user.email, req.body.user.password, req.usertype)
+    if (await isEmailUsed(req.body.user.email.toLowerCase()) == false) {
+        await AddNewUser(req.body.user.email.toLowerCase(), req.body.user.password, req.body.user.username, req.body.user.usertype);
+        const newuser = await getUserUsingEmailAndPassword(req.body.user.email.toLowerCase(), req.body.user.password, req.usertype)
         const interpratedData = await getUserData(await newuser)
         res.send(interpratedData)
     }
@@ -672,15 +672,15 @@ app.post('/AddNewUserForm', async (req, res) => {
 app.post('/AddUserLog', async (req, res) => {
     console.log('data added')
     try {
-        const data = await getUserUsingObjectId(req.body.user.email, req.body.user.id, req.body.user.usertype);
+        const data = await getUserUsingObjectId(req.body.user.email.toLowerCase(), req.body.user.id, req.body.user.usertype);
 
 
 
 
         const interpratedData = await addUserLogDataToData(await data, req.body.user.log)
 
-        const changedData = await changeUserData(req.body.user.email, req.body.user.id, 'Logs', await interpratedData, req.body.user.usertype)
-        await updateUserReaddingData(req.body.user.email, req.body.user.id, req.body.user.usertype);
+        const changedData = await changeUserData(req.body.user.email.toLowerCase(), req.body.user.id, 'Logs', await interpratedData, req.body.user.usertype)
+        await updateUserReaddingData(req.body.user.email.toLowerCase(), req.body.user.id, req.body.user.usertype);
         //sendUserData(res, getUserData(data))
 
         //console.log(await changedData)
@@ -697,7 +697,7 @@ app.post('/AddUserLog', async (req, res) => {
 app.post('/GetConnectedUser', async (req, res) => {
 
     try {
-        const data = await getUserUsingObjectId(req.body.user.email, req.body.user.id, req.body.user.usertype);
+        const data = await getUserUsingObjectId(req.body.user.email.toLowerCase(), req.body.user.id, req.body.user.usertype);
 
         const interpratedData = await getUserData(await data)
         //sendUserData(res, getUserData(data))
@@ -747,7 +747,7 @@ const getCalanderData = async () => {
 //getCalanderData()
 const checkConnectedAcounts = async (array = [], email = '') => {
     for (element in array) {
-        if (element['Email'] == email) {
+        if (element['Email'].toLowerCase() == email.toLowerCase()) {
             return true;
         }
 
@@ -766,11 +766,11 @@ app.post('/ConnectUserTo', async (req, res) => {
     try {
 
 
-        const connectToData = await getUserUsingObjectId(req.body.user.toEmail, req.body.user.toId, req.body.user.toUsertype);
-        const toConnectData = await getUserUsingObjectId(req.body.user.connectEmail, req.body.user.connectId, 'Student');
+        const connectToData = await getUserUsingObjectId(req.body.user.toEmail.toLowerCase(), req.body.user.toId, req.body.user.toUsertype);
+        const toConnectData = await getUserUsingObjectId(req.body.user.connectEmail.toLowerCase(), req.body.user.connectId, 'Student');
 
 
-        if (checkConnectedAcounts(await toConnectData['Email'], req.body.user.connectEmail)) {
+        if (checkConnectedAcounts(await toConnectData['Email'].toLowerCase(), req.body.user.connectEmail.toLowerCase())) {
 
             console.log('duplicate')
 
@@ -782,7 +782,7 @@ app.post('/ConnectUserTo', async (req, res) => {
 
             const interpratedData = await connectAcountDataToNewData(await connectToData, await toConnectData)
             console.log(await interpratedData)
-            const changedData = await changeUserData(req.body.user.toEmail, req.body.user.toId, 'ConnectedAcounts', await interpratedData, req.body.user.toUsertype)
+            const changedData = await changeUserData(req.body.user.toEmail.toLowerCase(), req.body.user.toId, 'ConnectedAcounts', await interpratedData, req.body.user.toUsertype)
 
             //sendUserData(res, getUserData(data))
 
