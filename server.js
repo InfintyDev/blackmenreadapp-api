@@ -745,13 +745,25 @@ const getCalanderData = async () => {
 
 }
 //getCalanderData()
-const checkConnectedAcounts = async (array = [], email = '') => {
-    for (element in array) {
-        if (element['Email'].toLowerCase() == email.toLowerCase()) {
-            return true;
-        }
+const checkConnectedAcounts = async (array = [{}], email = '') => {
+    console.log(array)
+    console.log(array.length)
+    console.log(email)
+    if (array.length > 0) {
+        for (element in array) {
+            console.log(array[element])
+            if (array[element]['Email']) {
+                console.log('has Email')
+                console.log(array[element]['Email'].toLowerCase())
+                if (array[element]['Email'].toLowerCase() == email.toLowerCase()) {
+                    return true;
+                }
+            }
 
+
+        }
     }
+    console.log('Diffrent')
 
     return false;
 
@@ -768,9 +780,10 @@ app.post('/ConnectUserTo', async (req, res) => {
 
         const connectToData = await getUserUsingObjectId(req.body.user.toEmail.toLowerCase(), req.body.user.toId, req.body.user.toUsertype);
         const toConnectData = await getUserUsingObjectId(req.body.user.connectEmail.toLowerCase(), req.body.user.connectId, 'Student');
+        console.log(await connectToData)
+        console.log(await toConnectData)
 
-
-        if (checkConnectedAcounts(await toConnectData['Email'].toLowerCase(), req.body.user.connectEmail.toLowerCase())) {
+        if (await checkConnectedAcounts(await connectToData['ConnectedAcounts'], req.body.user.connectEmail.toLowerCase())) {
 
             console.log('duplicate')
 
