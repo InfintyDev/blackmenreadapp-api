@@ -503,6 +503,42 @@ async function connectAcountDataToNewData(connectToData, toConnectData) {
 }
 
 
+async function removeAcountDataToNewData(removeFromData, toRemoveData) {
+    var modifiedData = await removeFromData
+
+
+    if (!modifiedData['ConnectedAcounts']) {
+        modifiedData['ConnectedAcounts'] = connectToData['ConnectedAcounts']
+
+        modifiedData['ConnectedAcounts'] = []
+        console.log(modifiedData)
+    }
+    var data = []
+
+    console.log(modifiedData['ConnectedAcounts'])
+    var connectedAcounts = modifiedData['ConnectedAcounts'];
+    var connectedRemoved = [];
+    //console.log({ UserName: toRemoveData['UserName'], Email: toRemoveData['Email'].toLowerCase(), id: toRemoveData['_id'] });
+    for (element of connectedAcounts) {
+        //console.log(element);
+
+        if (element["UserName"] == toRemoveData['UserName'] && element['Email'].toLowerCase() == toRemoveData['Email'].toLowerCase() && element['id'].toString() == toRemoveData['_id'].toString()) {
+
+        }
+        else {
+            connectedRemoved[connectedRemoved.length] = element
+        }
+    }
+    //console.log(connectedRemoved);
+    modifiedData['ConnectedAcounts'] = connectedRemoved;
+    //console.log(modifiedData)
+
+
+    return modifiedData['ConnectedAcounts'];
+
+}
+
+
 
 async function getUserData(userData) {
     try {
@@ -770,6 +806,69 @@ const checkConnectedAcounts = async (array = [{}], email = '') => {
 }
 
 
+app.post('/RemoveConnectedUser', async (req, res) => {
+    console.log('data added')
+
+
+    const fromEmail = req.body.user.toEmail;
+    const fromId = req.body.user.toId;
+    const fromUserType = req.body.user.toUsertype;
+    const removeEmail = req.body.user.removeEmail;
+    const removeId = req.body.user.removeId;
+
+    console.log("From Email: " + fromEmail)
+    console.log("From Id: " + fromId)
+    console.log("From User Type: " + fromUserType)
+    console.log("Remove Email: " + removeEmail)
+    console.log("Remove Id: " + removeId)
+
+    try {
+
+
+        const connectToData = await getUserUsingObjectId(fromEmail.toLowerCase(), fromId, fromUserType);
+        const toRemoveData = await getUserUsingObjectId(removeEmail.toLowerCase(), removeId, 'Student');
+        console.log(await connectToData)
+        console.log(await toRemoveData)
+
+        if (await checkConnectedAcounts(await connectToData['ConnectedAcounts'], removeEmail)) {
+
+            console.log('Exists')
+            //Put Code To Remove Acounts Here
+            const interpratedData = await removeAcountDataToNewData(await connectToData, await toRemoveData)
+            console.log(await interpratedData)
+            const changedData = await changeUserData(req.body.user.toEmail.toLowerCase(), req.body.user.toId, 'ConnectedAcounts', await interpratedData, req.body.user.toUsertype)
+            console.log(await changedData)
+        }
+        else {
+            console.log('Does Not Exist')
+
+            /*
+
+            const interpratedData = await connectAcountDataToNewData(await connectToData, await toConnectData)
+            console.log(await interpratedData)
+            const changedData = await changeUserData(req.body.user.toEmail.toLowerCase(), req.body.user.toId, 'ConnectedAcounts', await interpratedData, req.body.user.toUsertype)
+
+            //sendUserData(res, getUserData(data))
+
+            //console.log(await changedData)
+            res.send(await changedData)*/
+        }
+
+
+
+
+    }
+
+    catch {
+        console.log('log Error')
+    }
+
+
+
+
+});
+
+
 
 app.post('/ConnectUserTo', async (req, res) => {
     //console.log('data added')
@@ -809,7 +908,7 @@ app.post('/ConnectUserTo', async (req, res) => {
     }
     catch {
         console.log('log Error')
-    }
+    } oC
 
 
 
