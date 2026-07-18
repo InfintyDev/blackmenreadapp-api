@@ -22,8 +22,8 @@ const { fail } = require('assert');
 
 
 
-//const uri = "mongodb+srv://" + db_username + ":" + password + "@testbmr.xxaaupd.mongodb.net/?appName=TestBmr";
-const uri = "mongodb+srv://JohnTest:93QZffbBMv4nRWrm@testbmr.xxaaupd.mongodb.net/?appName=TestBmr";
+const uri = "mongodb+srv://" + db_username + ":" + password + "@testbmr.xxaaupd.mongodb.net/?appName=TestBmr";
+
 const urlPathBookRec = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSFIugHc6pLg5BtCDtuODXtWvZkIczhW625WtsqW7mixKf1S2DigKdTltVbVR7cFBL1XiWSCyaja1kG/pub?gid=0&single=true&output=csv"
 const urlPathCalendarData = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTrboDnifGpDieESIad74yaV2NTGxJfsA4GjKUZz7SmX2w6h9nfiDKnftTYIEmS6BUg-svsom4VBiv7/pub?output=csv"
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -35,7 +35,7 @@ const urlPathCalendarData = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTr
     }
 });
 */
-// "mongodb+srv://JohnTest:93QZffbBMv4nRWrm@testbmr.xxaaupd.mongodb.net/?appName=TestBmr";
+
 const userSchema = new mongoose.Schema({
     name: String,
     email: String,
