@@ -194,7 +194,7 @@ async function getUserUsingEmailAndPassword(email = '', passwordInst = '', userT
 async function removeUserLogData(logData, logToRemove) {
     const arrayData = await logData
 
-
+    console.log("Remove Data Function");
     if (arrayData.includes(logToRemove)) {
         console.log("containsLogToRemove");
         arrayData.pop(logToRemove)
@@ -319,7 +319,7 @@ async function updateUserReaddingData(email = '', id, acountType = 'Student') {
 
             var gottendata = data[0]
 
-            console.log(gottendata)
+            //console.log(gottendata)
             if (gottendata['ReadingStats']) {
                 console.log('Stats Exist')
                 var addData = gottendata;
@@ -373,10 +373,10 @@ async function updateUserReaddingData(email = '', id, acountType = 'Student') {
                         }
                         const element = gottendata['Logs'][index];
 
-                        console.log(element);
+                        //console.log(element);
                     }
-                    console.log(uniqueBooks);
-                    console.log(timeBooks);
+                    //console.log(uniqueBooks);
+                    //console.log(timeBooks);
 
                     var totalHour = 0
                     var totalMin = 0
