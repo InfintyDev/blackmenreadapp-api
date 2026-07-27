@@ -199,8 +199,11 @@ async function removeUserLogData(logData, logToRemove) {
         console.log("containsLogToRemove");
         arrayData.pop(logToRemove)
     }
+    else {
+        console.log("Does not contain LogToRemove");
+    }
 
-    console.log(arrayData);
+    //console.log(arrayData);
     return await arrayData;
 
 
@@ -724,6 +727,8 @@ app.post('/RemoveLog', async (req, res) => {
         console.log(req.body.user.email.toLowerCase())
         console.log(req.body.user.id)
         console.log(req.body.user.usertype)
+        console.log(req.body.user.log)
+        console.log(req.body.user.logindex)
         const data = await getUserUsingObjectId(req.body.user.email.toLowerCase(), req.body.user.id, req.body.user.usertype);
 
         console.log(await data)
