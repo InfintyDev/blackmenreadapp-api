@@ -192,7 +192,7 @@ async function getUserUsingEmailAndPassword(email = '', passwordInst = '', userT
 }
 
 async function removeUserLogData(logData, logToRemove, logIndex) {
-    if (logData.length == 1) {
+    if (await logData.length == 1) {
         return [];
     }
     const arrayData = logData.splice(logIndex, 1)
