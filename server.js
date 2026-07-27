@@ -22,7 +22,7 @@ const { fail } = require('assert');
 
 
 
-const uri = "mongodb+srv://" + db_username + ":" + password + "@testbmr.xxaaupd.mongodb.net/appName=TestBmr";
+const uri = "mongodb+srv://" + db_username + ":" + "93QZffbBMv4nRWrm" + "@testbmr.xxaaupd.mongodb.net/appName=TestBmr";
 //mongodb+srv://<db_username>:<db_password>@testbmr.xxaaupd.mongodb.net/
 
 const urlPathBookRec = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSFIugHc6pLg5BtCDtuODXtWvZkIczhW625WtsqW7mixKf1S2DigKdTltVbVR7cFBL1XiWSCyaja1kG/pub?gid=0&single=true&output=csv"
@@ -724,7 +724,7 @@ app.post('/RemoveLog', async (req, res) => {
         console.log(req.body.user.usertype)
         const data = await getUserUsingObjectId(req.body.user.email.toLowerCase(), req.body.user.id, req.body.user.usertype);
 
-        console.log(data)
+        console.log(await data)
 
 
         const interpratedData = await removeUserLogData(data.Logs, req.body.user.log)
