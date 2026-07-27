@@ -192,14 +192,14 @@ async function getUserUsingEmailAndPassword(email = '', passwordInst = '', userT
 }
 
 async function removeUserLogData(logData, logToRemove) {
-    const arrayData = logData
+    const arrayData = await logData
 
 
     if (arrayData.includes(logToRemove)) {
         arrayData.pop(logToRemove)
     }
 
-    return logData;
+    return await arrayData;
 
 
 }
