@@ -191,35 +191,17 @@ async function getUserUsingEmailAndPassword(email = '', passwordInst = '', userT
     }
 }
 
-async function removeUserLogData(email = '', password = '', userType = '') {
-    if (userType == 'Student' || userType == 'Parent' || userType == 'Tutor') {
-        const client = new MongoClient(uri, {
-            serverApi: {
-                version: ServerApiVersion.v1,
-                strict: true,
-                deprecationErrors: true,
-            }
-        });
-        console.log('try Connect')
-        try {
-            // Connect the client to the server	(optional starting in v4.7)
+async function removeUserLogData(logData, logToRemove) {
+    const arrayData = logData
 
-            await client.connect();
 
-            // Send a ping to confirm a successful connection
-            const users = await client.db("UserData").collection(userType + 'Users').find({ Email: email.toLocaleLowerCase(), Password: password }).toArray()
-            //console.log(users[0])
-            //console.log("Pinged your deployment. You successfully connected to MongoDB!");
-            var userInst = users[0]
-            userInst['Logs'] = []
-            console.log(userInst)
-            await client.db("UserData").collection(userType + 'Users').replaceOne({ Email: email.toLowerCase(), Password: password }, userInst)
-
-        } finally {
-            // Ensures that the client will close when you finish/error
-            await client.close();
-        }
+    if (arrayData.includes(logToRemove)) {
+        arrayData.pop(logToRemove)
     }
+
+    return logData;
+
+
 }
 
 async function getUserUsingObjectId(email = '', id = '', userType = '') {
@@ -717,6 +699,32 @@ app.post('/AddUserLog', async (req, res) => {
 
         const interpratedData = await addUserLogDataToData(await data, req.body.user.log)
 
+        const changedData = await changeUserData(req.body.user.email.toLowerCase(), req.body.user.id, 'Logs', await interpratedData, req.body.user.usertype)
+        await updateUserReaddingData(req.body.user.email.toLowerCase(), req.body.user.id, req.body.user.usertype);
+        //sendUserData(res, getUserData(data))
+
+        //console.log(await changedData)
+        res.send(await changedData)
+
+    }
+    catch {
+        console.log('log Error')
+    }
+
+
+
+});
+
+
+app.post('/RemoveLog', async (req, res) => {
+    console.log('data added')
+    try {
+        const data = await getUserUsingObjectId(req.body.user.email.toLowerCase(), req.body.user.id, req.body.user.usertype);
+
+
+
+
+        const interpratedData = await removeUserLogData(data.Logs, req.body.user.log)
         const changedData = await changeUserData(req.body.user.email.toLowerCase(), req.body.user.id, 'Logs', await interpratedData, req.body.user.usertype)
         await updateUserReaddingData(req.body.user.email.toLowerCase(), req.body.user.id, req.body.user.usertype);
         //sendUserData(res, getUserData(data))
