@@ -191,20 +191,25 @@ async function getUserUsingEmailAndPassword(email = '', passwordInst = '', userT
     }
 }
 
-async function removeUserLogData(logData, logToRemove) {
-    const arrayData = await logData
-
-
-
-    console.log("Remove Data Function");
-    if (arrayData.includes(await logToRemove)) {
-        console.log("containsLogToRemove");
-        arrayData.pop(await logToRemove)
-    }
-    else {
-        console.log("Does not contain LogToRemove");
-    }
-
+async function removeUserLogData(logData, logToRemove, logIndex) {
+    const arrayData = logData.filter(log => log !== logToRemove)
+    /*
+    
+        const testArray = ["", ""]
+    
+        testArray.filter(log => log != logToRemove)
+    
+    
+    
+        console.log("Remove Data Function");
+        if (arrayData.includes(await logToRemove)) {
+            console.log("containsLogToRemove");
+            //arrayData.pop(await logToRemove)
+        }
+        else {
+            console.log("Does not contain LogToRemove");
+        }
+    */
     //console.log(arrayData);
     return await arrayData;
 
@@ -726,17 +731,14 @@ app.post('/AddUserLog', async (req, res) => {
 app.post('/RemoveLog', async (req, res) => {
     console.log('data added')
     try {
-        console.log(req.body.user.email.toLowerCase())
-        console.log(req.body.user.id)
-        console.log(req.body.user.usertype)
-        console.log(req.body.user.log)
+
         console.log(req.body.user.logindex)
         const data = await getUserUsingObjectId(req.body.user.email.toLowerCase(), req.body.user.id, req.body.user.usertype);
 
         console.log(await data)
 
 
-        const interpratedData = await removeUserLogData(data.Logs, req.body.user.log)
+        const interpratedData = await removeUserLogData(data.Logs, req.body.user.log, req.body.user.logindex)
         const changedData = await changeUserData(req.body.user.email.toLowerCase(), req.body.user.id, 'Logs', await interpratedData, req.body.user.usertype)
         await updateUserReaddingData(req.body.user.email.toLowerCase(), req.body.user.id, req.body.user.usertype);
         //sendUserData(res, getUserData(data))
