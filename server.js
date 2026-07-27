@@ -194,10 +194,12 @@ async function getUserUsingEmailAndPassword(email = '', passwordInst = '', userT
 async function removeUserLogData(logData, logToRemove) {
     const arrayData = await logData
 
+
+
     console.log("Remove Data Function");
-    if (arrayData.includes(logToRemove)) {
+    if (arrayData.includes(await logToRemove)) {
         console.log("containsLogToRemove");
-        arrayData.pop(logToRemove)
+        arrayData.pop(await logToRemove)
     }
     else {
         console.log("Does not contain LogToRemove");
