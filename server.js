@@ -721,7 +721,7 @@ app.post('/RemoveLog', async (req, res) => {
     try {
         const data = await getUserUsingObjectId(req.body.user.email.toLowerCase(), req.body.user.id, req.body.user.usertype);
 
-
+        console.log(data)
 
 
         const interpratedData = await removeUserLogData(data.Logs, req.body.user.log)
@@ -734,7 +734,7 @@ app.post('/RemoveLog', async (req, res) => {
 
     }
     catch {
-        console.log('log Error')
+        console.log('remove log Error')
     }
 
 
