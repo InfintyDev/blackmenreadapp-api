@@ -199,6 +199,7 @@ async function removeUserLogData(logData, logToRemove) {
         arrayData.pop(logToRemove)
     }
 
+    console.log(arrayData);
     return await arrayData;
 
 
