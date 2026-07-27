@@ -719,6 +719,9 @@ app.post('/AddUserLog', async (req, res) => {
 app.post('/RemoveLog', async (req, res) => {
     console.log('data added')
     try {
+        console.log(req.body.user.email.toLowerCase())
+        console.log(req.body.user.id)
+        console.log(req.body.user.usertype)
         const data = await getUserUsingObjectId(req.body.user.email.toLowerCase(), req.body.user.id, req.body.user.usertype);
 
         console.log(data)
