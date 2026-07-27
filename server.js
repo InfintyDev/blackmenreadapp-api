@@ -196,6 +196,7 @@ async function removeUserLogData(logData, logToRemove) {
 
 
     if (arrayData.includes(logToRemove)) {
+        console.log("containsLogToRemove");
         arrayData.pop(logToRemove)
     }
 
