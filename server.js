@@ -1,6 +1,6 @@
 
 
-import ArrayUtils from org.apache.commons.lang3.ArrayUtils;
+
 const dotenv = require('dotenv');
 const bcrypt = require('bcryptjs');
 //import bcrypt from 'bcryptjs'
@@ -212,7 +212,7 @@ async function removeUserLogData(logData, logToRemove, logIndex) {
 
     }
 
-    const arrayData = ArrayUtils.removeElement(logData, logIndexIe)
+    const arrayData = logData.splice(logIndexIe, 0)
     const testArray = ["", ""]
 
     //const arrayData = logData.
