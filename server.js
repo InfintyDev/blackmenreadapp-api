@@ -19,6 +19,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const e = require('express');
 const { fail } = require('assert');
+const { log } = require('console');
 
 
 
@@ -195,7 +196,18 @@ async function removeUserLogData(logData, logToRemove, logIndex) {
     if (await logData.length == 1) {
         return [];
     }
-    const arrayData = logData.splice(logIndex, 1)
+
+
+    var logIndexIe = logIndex;
+    for (let index = 0; index < logData.length; index++) {
+        const element = logData[index];
+
+        if (element["Date"] == logToRemove["Date"]) {
+            logIndexIe = index;
+        }
+
+    }
+    const arrayData = logData.splice(logIndexIe, 1)
     const testArray = ["", ""]
     //const arrayData = logData.
 
