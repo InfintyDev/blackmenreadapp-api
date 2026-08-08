@@ -1,6 +1,10 @@
+
+
+import ArrayUtils from org.apache.commons.lang3.ArrayUtils;
 const dotenv = require('dotenv');
 const bcrypt = require('bcryptjs');
 //import bcrypt from 'bcryptjs'
+
 const express = require('express');
 const papa = require('papaparse');
 const csvLoader = require('csv-loader');
@@ -207,8 +211,10 @@ async function removeUserLogData(logData, logToRemove, logIndex) {
         }
 
     }
-    const arrayData = logData.splice(logIndexIe, 1)
+
+    const arrayData = ArrayUtils.removeElement(logData, logIndexIe)
     const testArray = ["", ""]
+
     //const arrayData = logData.
 
 
