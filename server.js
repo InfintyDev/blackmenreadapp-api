@@ -202,20 +202,27 @@ async function removeUserLogData(logData, logToRemove, logIndex) {
     }
 
 
+    var addedInt = 0;
     var logIndexIe = logIndex;
+    var arrayData = [];
     for (let index = 0; index < logData.length; index++) {
         const element = logData[index];
 
         if (element["Date"] == logToRemove["Date"]) {
             logIndexIe = index;
+
+        }
+        else {
+            arrayData[addedInt] = element;
+            addedInt += 1;
         }
 
     }
 
-    const arrayData = logData.splice(logIndexIe, 0)
-    const testArray = ["", ""]
+    //const arrayData = logData.splice(logIndexIe, 0)
+    //const testArray = ["", ""]
 
-    //const arrayData = logData.
+
 
 
     /*
