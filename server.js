@@ -513,6 +513,22 @@ async function addUserLogDataToData(data, log) {
 
 }
 
+async function addUserGoalDataToData(data, goal) {
+    var modifiedData = await data
+
+    if (!modifiedData['Goals']) {
+        modifiedData['Goals'] = data['Goals']
+
+        modifiedData['Goals'] = []
+        //console.log(modifiedData)
+    }
+    modifiedData['Goals'][modifiedData['Goals'].length] = goal
+
+
+    return modifiedData['Goals'];
+
+}
+
 async function connectAcountDataToNewData(connectToData, toConnectData) {
     var modifiedData = await connectToData
 
@@ -744,6 +760,33 @@ app.post('/AddUserLog', async (req, res) => {
         const interpratedData = await addUserLogDataToData(await data, req.body.user.log)
 
         const changedData = await changeUserData(req.body.user.email.toLowerCase(), req.body.user.id, 'Logs', await interpratedData, req.body.user.usertype)
+        await updateUserReaddingData(req.body.user.email.toLowerCase(), req.body.user.id, req.body.user.usertype);
+        //sendUserData(res, getUserData(data))
+
+        //console.log(await changedData)
+        res.send(await changedData)
+
+    }
+    catch {
+        console.log('log Error')
+    }
+
+
+
+});
+
+
+app.post('/AddUserGoal', async (req, res) => {
+    console.log('data added')
+    try {
+        const data = await getUserUsingObjectId(req.body.user.email.toLowerCase(), req.body.user.id, req.body.user.usertype);
+
+
+
+
+        const interpratedData = await addUserGoalDataToData(await data, req.body.user.goal)
+
+        const changedData = await changeUserData(req.body.user.email.toLowerCase(), req.body.user.id, 'Goals', await interpratedData, req.body.user.usertype)
         await updateUserReaddingData(req.body.user.email.toLowerCase(), req.body.user.id, req.body.user.usertype);
         //sendUserData(res, getUserData(data))
 
